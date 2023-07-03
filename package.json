@@ -1,0 +1,96 @@
+{
+    "name": "demo2.0",
+    "version": "0.0.1",
+    "author": "",
+    "license": "MIT",
+    "scripts": {
+        "start": "krn start",
+        "debug": "krn start --debug",
+        "build": "krn build",
+        "lint": "eslint . --fix",
+        "postinstall": "./node_modules/.bin/krn-webpack patch"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": "eslint --fix"
+    },
+    "dependencies": {
+        "@babel/runtime": "^7.17.2",
+        "@kds/bridge-lite": "^1.0.2",
+        "@kds/image": "1.7.38",
+        "@kds/react-native-request": "^0.3.1",
+        "@kid-ui/krn": "^0.7.29",
+        "@ks/weblogger": "^3.10.22",
+        "@locallife/biz-component": "0.1.24",
+        "@locallife/biz-hooks": "0.0.4",
+        "@locallife/biz-request": "0.0.15",
+        "@locallife/log": "0.1.9",
+        "@locallife/page": "0.2.2",
+        "@locallife/utils": "0.2.5",
+        "@react-native-masked-view/masked-view": "^0.2.9",
+        "@react-navigation/native": "^5.x",
+        "@react-navigation/stack": "^5.x",
+        "@reduxjs/toolkit": "^1.9.3",
+        "@tanstack/react-query": "^4.29.19",
+        "@types/date-fns": "^2.6.0",
+        "date-fns": "^2.30.0",
+        "lodash-es": "^4.17.21",
+        "react": "16.11.0",
+        "react-native": "0.62.2-ks.6",
+        "react-native-extended-stylesheet": "^0.12.0",
+        "react-native-safe-area-context": "3.0.5",
+        "react-native-safe-area-view": "^1.1.1",
+        "react-native-screens": "^2.x",
+        "react-query": "^3.39.3",
+        "react-redux": "^8.1.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.6.2",
+        "@kds/babel-plugin-kid-import": "^1.0.15",
+        "@kds/bridge-lite-types": "^1.0.111",
+        "@kds/eslint-config-react": "^0.2.5",
+        "@krn/cli": "^1.0.0-alpha.5",
+        "@krn/inline-require-webpack-plugin": "^0.4.0",
+        "@krn/webpack-tools": "^0.5.0",
+        "@types/react": "16.9.56",
+        "@types/react-native": "0.62.2",
+        "babel-plugin-module-resolver": "^4.1.0",
+        "babel-plugin-transform-imports": "^2.0.0",
+        "babel-plugin-transform-remove-console": "^6.9.4",
+        "circular-dependency-plugin": "^5.2.2",
+        "eslint": "^7.12.1",
+        "husky": "^4.3.0",
+        "lint-staged": "^10.5.4",
+        "metro-react-native-babel-preset": "0.59.0",
+        "prettier": "^2.1.2",
+        "typescript": "^4.1.3"
+    },
+    "resolutions": {
+        "@react-native-community/cli": "~4.13.1",
+        "@react-native-community/cli-tools": "4.13.0",
+        "@types/react": "16.9.56",
+        "@babel/runtime": "^7.17.2",
+        "@ks/weblogger": "^3.10.22",
+        "@kds/react-native-svg": "^12.1.9",
+        "react-native-gesture-handler": "^1.10.3",
+        "@kds/image": "1.7.38"
+    },
+    "jest": {
+        "preset": "react-native",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ]
+    },
+    "engines": {
+        "node": ">=10"
+    }
+}

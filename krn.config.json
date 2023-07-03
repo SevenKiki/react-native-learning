@@ -1,0 +1,9 @@
+{
+    "entry": "./src/index.tsx",
+    "scheme": "kwai://",
+    "useWebpack": true,
+    "projectName": "demo2.0",
+    "installCmd": "yarn",
+    "framework": "React",
+    "language": "TypeScript"
+}
