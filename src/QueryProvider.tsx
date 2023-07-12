@@ -7,12 +7,11 @@ export const queryProductsData = () => {
         method: 'GET',
         responseType: 'string',
     }).then((response) => {
+        // @ts-ignore
         let data_ = JSON.stringify(JSON.parse(response.data));
         console.log('Query........');
 
         return JSON.parse(data_).itemList;
-
-        // JSON.stringify(JSON.parse(response.data));
     });
 };
 

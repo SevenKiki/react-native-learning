@@ -2,16 +2,20 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Product } from '@/productsService';
 
-// import { queryProductsData } from '@/QueryProvider';
-// import { useQuery } from 'react-query';
 import store from '@/store/store';
+import { useQuery } from 'react-query';
+import { queryProductsData } from '@/QueryProvider';
 
 export function ProductsList({ navigation }) {
-    // const [products, isLoading] = useGetProducts(null);
-    store.dispatch({
-        type: 'GET',
+    const productsQueryData = useQuery(['productsData'], queryProductsData, {
+        staleTime: 5 * 60 * 1000,
+        onSuccess: (data) => {
+            store.dispatch({
+                type: 'SET',
+                productsData: data,
+            });
+        },
     });
-    const productsQueryData = store.getState().productReducer;
 
     const products = productsQueryData?.data;
     const isLoading = productsQueryData?.isLoading;
@@ -53,7 +57,6 @@ export function ProductsList({ navigation }) {
         );
     }
     function renderFlatlist() {
-        // console.log('KK console products:', products);
         return (
             <FlatList
                 data={products}

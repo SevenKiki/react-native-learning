@@ -1,11 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import request from '@kds/react-native-request';
-import { useQuery } from 'react-query';
-import { setIsServer } from '@tanstack/react-query/build/lib/__tests__/utils';
 
-// const [isLoading, setLoading] = useState(true);
-// const [productData, setProductData] = useState([]);
+const styles = StyleSheet.create({
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 16,
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        shadowColor: 'black',
+        shadowOffset: {
+            height: 0,
+            width: 0,
+        },
+        elevation: 1,
+        marginVertical: 20,
+    },
+    thumb: {
+        height: 260,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        width: '100%',
+    },
+    infoContainer: {
+        padding: 16,
+    },
+    name: {
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
+    price: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 8,
+        textAlign: 'left',
+    },
+    cityName: {
+        fontSize: 16,
+        fontWeight: '400',
+        marginBottom: 8,
+        textAlign: 'right',
+    },
+});
 
 const PRODUCTS = [
     {
@@ -48,6 +84,7 @@ export function useGetProducts(param) {
             method: 'GET',
             responseType: 'string',
         }).then((response) => {
+            // @ts-ignore
             let data_ = JSON.stringify(JSON.parse(response.data));
 
             setProductData(JSON.parse(data_).itemList);
@@ -57,17 +94,6 @@ export function useGetProducts(param) {
 
     return [productData, isLoading];
 }
-
-export function useGetProduct(id) {
-    const [productData, isLoading] = useGetProducts(null);
-    console.log(
-        'KK console 86',
-        productData.find((product) => product.itemId === id),
-    );
-
-    return productData.find((product) => product.itemId === id);
-}
-
 export function Product({
     onPress,
     itemImage,
@@ -99,44 +125,3 @@ export function Product({
         </TouchableOpacity>
     );
 }
-
-const styles = StyleSheet.create({
-    card: {
-        backgroundColor: 'white',
-        borderRadius: 16,
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        shadowColor: 'black',
-        shadowOffset: {
-            height: 0,
-            width: 0,
-        },
-        elevation: 1,
-        marginVertical: 20,
-    },
-    thumb: {
-        height: 260,
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-        width: '100%',
-    },
-    infoContainer: {
-        padding: 16,
-    },
-    name: {
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    price: {
-        fontSize: 16,
-        fontWeight: '600',
-        marginBottom: 8,
-        textAlign: 'left',
-    },
-    cityName: {
-        fontSize: 16,
-        fontWeight: '400',
-        marginBottom: 8,
-        textAlign: 'right',
-    },
-});

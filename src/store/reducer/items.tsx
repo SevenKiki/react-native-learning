@@ -1,17 +1,5 @@
-import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { queryProductsData } from '@/QueryProvider';
 import { toNumber } from 'lodash-es';
-
 import { combineReducers } from 'redux';
-
-export function getItemsCount(items) {
-    var count = 0;
-    for (const item of items) {
-        count += item.qty;
-    }
-    return count;
-}
 
 export function getTotalPrice(items) {
     console.log('get total price::', items);
@@ -23,32 +11,23 @@ export function getTotalPrice(items) {
 }
 
 export const productReducer = (state = [], action) => {
-    function setProducts() {
-        const productsQuery = useQuery(['productsData'], queryProductsData, {
-            staleTime: 5 * 60 * 1000,
-        });
-        if (productsQuery) {
-            return productsQuery;
-        }
-    }
-
     switch (action.type) {
-        case 'GET':
-            return setProducts();
+        case 'SET':
+            return action.productsData;
         default:
             return state;
     }
 };
 
 function prevItemsAddQty(id, prevItems, price) {
-    const newItems = [];
+    const newItems: object[] = [];
     for (const item of prevItems) {
-        console.log(' item::', item);
+        // console.log(' item::', item);
         if (item.id === id) {
             item.qty++;
             item.totalPrice += price;
         }
-        console.log(' item::', item);
+        // console.log(' item::', item);
         newItems.push(item);
     }
     return newItems;

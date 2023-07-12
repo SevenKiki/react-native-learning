@@ -8,15 +8,18 @@ import { ProductDetails } from '@/productDetails';
 
 import { Cart } from '@/Cart';
 import { CartIcon } from '@/CartIcon';
-import CartProvider from '@/CartContext';
 import { queryClient } from '@/QueryProvider';
 import { QueryClientProvider } from 'react-query';
-
-import store from '@/store/store';
 
 const Stack = createStackNavigator();
 
 // const Stack = createNativeStackNavigator();
+
+const styles = StyleSheet.create({
+    headerTitle: {
+        fontSize: 20,
+    },
+});
 
 export const App = () => {
     return (
@@ -64,11 +67,5 @@ export const App = () => {
         </QueryClientProvider>
     );
 };
-
-const styles = StyleSheet.create({
-    headerTitle: {
-        fontSize: 20,
-    },
-});
 
 AppRegistry.registerComponent('demo', () => App);
