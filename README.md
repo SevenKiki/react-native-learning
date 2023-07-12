@@ -57,12 +57,11 @@
 
 ## **优化步骤**
 
-| demo1.0 | 新增功能 | 实现浏览商品列表、加入购物车、查看购物车详情等功能。使用useContext进行状态管理，使用request直接请求。 |
-| --- | --- | --- |
-|  | 待优化 | 1. 在productsList 、Cart、CartIcon等组件中需要获取所有商品的信息，每次都需要通过request查询，同样的数据进行多次查询会影响性能，因此使用React Query进行优化。
-2. 使用useContext来记录全局的状态（购物车中的item），并在index.tsx中使用过contextProvider来管理状态，对于小项目，这样的状态管理方式足够用，然而有着复杂状态改变的项目，Redux时更好的状态管理选择。 |
-| demo2.0 | 新增功能 | 使用React Query管理数据请求，相同Query Key的请求只需要执行一次request。 |
-| demo3.0 | 新增功能 | 使用Redux 管理状态，需要管理的内容是请求返回的商品数据ProductData和购物车数据items。因此使用combineReducer连接两个reducer（记录购物车item状态的itemsReducer和记录请求全部商品数据的productsReducer） |
+| demo1.0 | 新增功能 | 实现浏览商品列表、加入购物车、查看购物车详情等功能。使用useContext进行状态管理，使用request直接请求。                                                                                                                                                                   |
+| --- | --- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  | 待优化 | 1. 在productsList 、Cart、CartIcon等组件中需要获取所有商品的信息，每次都需要通过request查询，同样的数据进行多次查询会影响性能，因此使用React Query进行优化.2. 使用useContext来记录全局的状态（购物车中的item），并在index.tsx中使用过contextProvider来管理状态，对于小项目，这样的状态管理方式足够用，然而有着复杂状态改变的项目，Redux时更好的状态管理选择。 |
+| demo2.0 | 新增功能 | 使用React Query管理数据请求，相同Query Key的请求只需要执行一次request。                                                                                                                                                                             |
+| demo3.0 | 新增功能 | 使用Redux 管理状态，需要管理的内容是请求返回的商品数据ProductData和购物车数据items。因此使用combineReducer连接两个reducer（记录购物车item状态的itemsReducer和记录请求全部商品数据的productsReducer）                                                                                       |
 
 ## **Demo小结**
 
