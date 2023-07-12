@@ -1,236 +1,82 @@
-# 页面模板
+# DEMO： 商品购物车
 
-## 完善配置项
+- 本demo只能在特定环境运行
+- 获取数据的url是在mocky平台自己mock的，除本机外无法使用
 
-### 1. App配置
+## **功能展示**
 
-1. 检查 './src/init.ts' 文件中的初始化参数是否符合要求，重点关注
-    ```typescript
-   LocalLifeInitLogger.setBizInfo({xxx});// 是否满足pv公参要求，不满足则继续添加
-   bizRequest.bizInit({xxx});// 请求库初始化，其中需要特别注意responseBaseVerifyFunc的配置，和服务端约定好接口错误定义的字段后填写
-   ```
-    [请求库的配置参考](https://kdev.corp.kuaishou.com/git/localkrn/locallife/biz-request/-/file-detail?branchName=master&filePath=README.md&repoId=106277&repoName=biz-request)
+1. 查看商品列表
 
-2. appModel类型转化，首先把业务参数定义到IAppProps中，然后在appModel.init方法中将入参string类型转换为对应类型
-    ```typescript
-   if (!this._appModel) {
-            this._appModel = {
-                ...appProps,
-                BundleVersionCode: +appProps.BundleVersionCode,
-            };
-        }
-   ```
-    需要使用appModel的地方，直接引入即可
+![image](https://github.com/SevenKiki/react-native-learning/blob/main/image/productsList.png)
 
-   
-3. weblogger的初始化参数（非必须）
-    代码位置 './src/utils/logger.ts'
+2. 查看商品详情
 
-### 2. 页面配置
+![image](https://github.com/SevenKiki/react-native-learning/blob/main/image/productDetails.png)
 
-代码位置 './src/page/demo/index.ts'
-参考
-```typescript
-class DemoConfig implements IPageConfig {
-    onRequest(): Promise<any> {
-        // 页面首个请求，该请求完成后会上报pv、分阶段耗时
-        return bizRequest.get({
-            url: '/rest/op/vc/poi/detail/app/detail/v3/head',
-            params: {
-                // @ts-ignore
-                poiId: appModel.instance.poiId,
-                fromExternalJump: true,
-            },
-        });
-    }
+3. 查看购物车
 
-    page: React.ComponentType<any> = Demo; // 页面对应的组件
+![image](https://github.com/SevenKiki/react-native-learning/blob/main/image/cart.png)
 
-    // todo 多种容器的，需要按照实际情况传递
-    get isHalfScreen() {
-        // 是否是半屏
-        return false;
-    }
 
-    pageName: string = 'Demo'; // 页面名称，填写pv上报的名称
+## **文件结构**
 
-    queryKey = 'demo'; // 页面对应的queryKey
+```
+.
+├── .eslintignore						// eslint忽略文件
+├── .eslintrc								// eslint规则
+├── .git
+├── .gitignore							// git忽略文件
+├── .idea
+├── .prettierrc							// 代码格式配置
+├── .yarnrc									// yarn源配置
+├── CHANGELOG.md
+├── README.md
+├── babel-webpack.config.js
+├── babel.config.js     		// babel配置，将JS转换为向后兼容的版本
+├── krn.config.json					// krn配置
+├── metro.config.js					// metro配置的RN打包工具
+├── package.json
+├── node_modules						// 安装包
+├── src
+│   ├── Cart.tsx
+│   ├── CartIcon.tsx
+│   ├── QueryProvider.tsx	//react query
+│   ├── index.tsx
+│   ├── productDetails.tsx
+│   ├── productsList.tsx
+│   ├── productsService.tsx
+│   └── store							// redux store
+│       ├── reducer
+│       │   └── items.tsx
+│       └── store.tsx
+├── tsconfig.json					// ts配置
+├── webpack.config.js
+└── yarn.lock							// yarn 版本
 
-    requireRouteParams = ['poiId']; // 快链中必须的参数
-}
 ```
 
-## 常用能力介绍
+## **优化步骤**
 
-### 1. 夜间模式
+| demo1.0 | 新增功能 | 实现浏览商品列表、加入购物车、查看购物车详情等功能。使用useContext进行状态管理，使用request直接请求。 |
+| --- | --- | --- |
+|  | 待优化 | 1. 在productsList 、Cart、CartIcon等组件中需要获取所有商品的信息，每次都需要通过request查询，同样的数据进行多次查询会影响性能，因此使用React Query进行优化。
+2. 使用useContext来记录全局的状态（购物车中的item），并在index.tsx中使用过contextProvider来管理状态，对于小项目，这样的状态管理方式足够用，然而有着复杂状态改变的项目，Redux时更好的状态管理选择。 |
+| demo2.0 | 新增功能 | 使用React Query管理数据请求，相同Query Key的请求只需要执行一次request。 |
+| demo3.0 | 新增功能 | 使用Redux 管理状态，需要管理的内容是请求返回的商品数据ProductData和购物车数据items。因此使用combineReducer连接两个reducer（记录购物车item状态的itemsReducer和记录请求全部商品数据的productsReducer） |
 
-利用EStyleUtil和getColorFunc实现，参考
+## **Demo小结**
 
-```typescript
-export const styles = EStyleUtil.create({
-    container: {
-        backgroundColor: getColorFunc('cs_common_background_secondary'),
-    },
-});
-```
+文档学习的同时编写demo，理论实践结合，对各个知识点的理解更加深刻，demo中主要使用了：
 
-### 2. 屏幕适配，原理参考EStyleWrapper.create方法，凡是使用EStyleUtil创建的style都默认适配了
+- RN组件（Button, FlatList, ActivityIndicator，StyleSheet...）
+- KDS组件（KidButton）
+- flexBox布局
+- useState & useEffect & useContext Hook
+- 网络交互与请求管理（request、React Query）
+- 导航器（Navigation）
+- 状态管理(React Redux)
 
-### 3. ab和Kswitch
+Demo缺点：
 
-#### 添加配置
-
-参考 './src/constants/abConfig.ts' 和 './src/constants/switchConfig.ts'
-
-```typescript
-export const abConfigs = defineConfigs([
-    {
-        name: 'goods_page_purchase_entrance_writing', // 实验参数
-        type: 'bool', // 实验参数类型
-        stateKey: 'goodAb', // 该实验对应的状态key，使用方式： const { ab } = useContext(AbKswitchContext); ab.goodAb;
-        defaultValue: false, // 实验默认值
-    }, // 追加其他实验
-]);
-
-export const switchConfigs = defineConfigs([
-    {
-    name: 'yoda_web_enable_wk_checkBlank', // 开关名称
-    stateKey: 'checkBlankSwitch', // 开关对应的状态key，使用方式： const { kSwitch } = useContext(AbKswitchContext); kSwitch.checkBlankSwitch;
-    defaultValue: false, // 开关默认值
-    }, // 追加其他开关
-]);
-```
-
-#### 使用
-
-```typescript
-const { ab, kSwitch } = useContext(AbKswitchContext);
-const { goodAb } = ab;
-const { checkBlankSwitch } = kSwitch;
-```
-
-### 4. 业务埋点上报
-
-#### pv上报
-
-```typescript
-    const { reportPV } = useShowReport();// reportPV的首个参数为全局唯一标识，防止重复上报
-
-    reportPV(demoConfig.pageName, () => {
-        localLifeBizLogger.pageShow();
-    });
-```
-
-#### show埋点上报
-
-```typescript
-const { reportShow } = useShowReport(); // reportShow的首个参数为全局唯一标识，防止重复上报
-useMount(() => {
-    reportShow('DEMO_ELEMENT_TEXT', () => {
-        localLifeBizLogger.show('ELEMENT_TEXT');
-    });
-    reportShow('DEMO_ELEMENT_TEXT1', () => {
-        localLifeBizLogger.show('ELEMENT_TEXT');
-    });
-});
-```
-
-#### click埋点上报
-
-```typescript
- localLifeBizLogger.click('xxxxx');
-```
-
-### 5. App状态
-
-```typescript
-interface IAppState {
-    /**
-     * 是否低内存. 建议的操作：1. 停止动画动图 2. 给用户提醒 3. 清除不用各种缓存 4. 结合业务，做一些有利于释放内存的动作
-     */
-    isLowMemory: boolean;
-    /**
-     * 页面显示状态
-     */
-    appShowState: TAppShowState;
-    /**
-     * 页面是否隐藏，对appShowState的封装
-     */
-    isAppHidden: boolean;
-}
-
-const { isLowMemory, appShowState, isAppHidden } = useContext(AppStateContext);
-```
-
-### 6. 网络请求
-
-#### 基础用法
-```typescript
-const data = await bizRequest.get({
-    url: '/rest/op/vc/poi/detail/app/detail/v3/head',
-    params: {
-        // @ts-ignore
-        poiId: appModel.instance.poiId,
-        fromExternalJump: true,
-    },
-})
-```
-更多的使用方式见 [请求库](https://kdev.corp.kuaishou.com/git/localkrn/locallife/biz-request/-/file-detail?branchName=master&filePath=README.md&repoId=106277&repoName=biz-request)
-
-#### 进阶用法
-如果需要请求的很多状态，如loading,isError,refetching,refetch等等，请使用react-query, **[文档地址](https://tanstack.com/query/v3/docs/react/overview)**
-
-```typescript
-export function useQueryDemo() {
-    return useQuery<IBaseResponse<IDemoDataModel>>(
-        'demoKey',
-        () => bizRequest.get({
-            url: '/rest/op/vc/poi/detail/app/detail/v3/head',
-            params: {
-                // @ts-ignore
-                poiId: appModel.instance.poiId,
-                fromExternalJump: true,
-            },
-        }),
-        {
-            onSettled: (data, error) => {
-                
-            },
-        },
-    );
-}
-```
-
-### 7. 状态管理
-使用redux-toolkit,参考 [redux-toolkit](https://redux-toolkit.js.org/introduction/getting-started)
-
-
-### 8. 桥的使用
-使用invoke函数,参考 [bridge使用说明](https://docs.corp.kuaishou.com/d/home/fcAAO_-BGGnJopYjijHguggQ5#section=h.z6vns2d0bzp3)
-
-### 9. 本地生活lib库集合
-
-[lib库集合](https://kdev.corp.kuaishou.com/git/groups/localkrn/locallife/-/overview?groupId=47012)
-
-
-## 代码规范
-
-### 文件（夹）命名
-
-均小驼峰命名，如：hooks/useAppState/index.ts，除非特殊的工具类等
-
-### 组件文件夹组织方式
-
-如goodsCard组件
-
-````
-goodsCard
-    index.tsx // 组件,组件名称大驼峰如GoodsCard
-    styles.ts // 组件样式，当styles较多时，可以新建styles文件夹
-    hooks.ts // 组件hooks 如useGoodsCard,当hooks较多时，可以新建hooks文件夹
-    config.ts // 组件配置
-    types.ts // 组件类型定义
-````
-### redux的组织方式
-1. 一个接口对应的一个dataSlice,如poiHeaderDataSlice,poiInfoDataSlice;
-2. 一个页面可以拆分出一个交互的slice，存放纯交互状态，dataSlice如果依赖交互状态可以使用[extraReducers api](https://redux-toolkit.js.org/api/createSlice#extrareducers)，例如poiInteractionSlice;
+- 功能简单、逻辑简单，所以没有用到继承，组件封装层数很少。
+- 只需要请求一种数据，且数据量不大，在数据请求模块缺少优化，进入商品列表后Loading页面持续时间长
